@@ -1,0 +1,15 @@
+# Python virtual environment
+venv/
+__pycache__/
+*.pyc
+
+# User data file
+data.json
+
+# Uploaded media
+static/uploads/photos/
+static/uploads/icons/
+static/uploads/videos/
+
+# System files
+.DS_Store

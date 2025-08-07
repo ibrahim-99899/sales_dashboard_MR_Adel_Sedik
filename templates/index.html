@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Top Sellers</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <div class="left">
+      <h1 id="chart-title">Sales Team Ranking</h1>
+      <svg id="chart" width="950" height="500"></svg>
+    </div>
+    <div class="right">
+      <div id="topName" class="top-name-container">
+        <h1 class="top-performer-title">The Top Performer</h1>
+        <div class="top-performer-name"></div>
+      </div>
+      <img id="topImage" class="top-image"
+        src="{{ url_for('static', filename='images/adel_sedik.jpg') }}"
+        alt="Top Seller"
+        onerror="this.src='/static/images/default.png'" />
+    </div>
+  </div>
+  <div id="videoPopup" class="video-popup hidden">
+    <video id="topVideo" autoplay muted playsinline></video>
+  </div>
+
+  <script src="{{ url_for('static', filename='chart.js') }}"></script>
+</body>
+
+</html>

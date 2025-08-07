@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Manage Dashboard Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='manage_style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Manage Dashboard People</h1>
+
+        <form method="POST" enctype="multipart/form-data" class="form-section">
+            <select name="full_name" required>
+                <option value="" disabled selected>Select Full Name</option>
+                {% for name in hubspot_names %}
+                <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="goal_name" required>
+                <option value="" disabled selected>Choose Goal Name</option>
+                {% for goal in goal_names %}
+                <option value="{{ goal }}">{{ goal }}</option>
+                {% endfor %}
+            </select>
+
+
+            <label>File ID:</label>
+            <input type="text" name="file_id" required placeholder="bella" />
+
+            <input type="text" name="short_name" placeholder="Short Name (e.g. sohaila)" required>
+
+            <label>Upload Profile Image (.png)</label>
+            <input type="file" name="photo" accept="image/png" required>
+
+            <label>Upload Icon Image (.png)</label>
+            <input type="file" name="icon" accept="image/png" required>
+
+            <label>Upload Video (.mp4)</label>
+            <input type="file" name="video" accept="video/mp4" required>
+
+            <button type="submit">➕ Add Person</button>
+        </form>
+
+        <h2>Current People</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Short Name</th>
+                    <th>File ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for full_name, person in people.items() %}
+                <tr>
+                    <td>{{ full_name }}</td>
+                    <td>{{ person.short }}</td>
+                    <td>{{ person.file_id }}</td>
+                    <td>
+                        <button type="button"
+                            onclick="editPerson('{{ full_name }}', '{{ person.short }}', '{{ person.file_id }}', '{{ person.goal_name }}')">
+                            ✏️ Edit
+                        </button>
+                        <a href="{{ url_for('delete_person', name=full_name) }}"
+                            onclick="return confirm('Are you sure?')">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No people added yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+        <br>
+        <a href="{{ url_for('index') }}">⬅️ Back to Dashboard</a>
+    </div>
+    <script>
+        function editPerson(fullName, shortName, fileId, goalName) {
+            document.querySelector('select[name="full_name"]').value = fullName;
+            document.querySelector('input[name="short_name"]').value = shortName;
+            document.querySelector('input[name="file_id"]').value = fileId;
+            document.querySelector('select[name="goal_name"]').value = goalName;
+
+            document.querySelector('input[name="photo"]').required = false;
+            document.querySelector('input[name="icon"]').required = false;
+            document.querySelector('input[name="video"]').required = false;
+
+            // Add hidden input to tell server this is an update
+            let hiddenInput = document.getElementById("update_flag");
+            if (!hiddenInput) {
+                hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = "is_update";
+                hiddenInput.value = "1";
+                hiddenInput.id = "update_flag";
+                document.querySelector(".form-section").appendChild(hiddenInput);
+            }
+
+            // Update form title and button text
+            document.querySelector("button[type='submit']").textContent = "💾 Save Changes";
+        }
+    </script>
+
+</body>
+
+</html>
