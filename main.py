@@ -371,3 +371,4 @@ def people_metadata():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
